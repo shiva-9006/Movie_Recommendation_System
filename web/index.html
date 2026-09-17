@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CINEFILE // Neural Cinema Discovery & Vector Recommendation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dark-theme">
+  <!-- Noise & Ambient Glow -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="film-grain"></div>
+
+  <!-- Main Container -->
+  <div class="app-viewport">
+    
+    <!-- Top Nav Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">◈</div>
+        <div class="brand-text">
+          <span class="brand-name">CINEFILE</span>
+          <span class="brand-tag">ORACLE v2.4</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="search-bar-wrapper">
+          <span class="search-icon">⌕</span>
+          <input 
+            type="text" 
+            id="movieSearchInput" 
+            placeholder="Search archive or press '/'..." 
+            autocomplete="off" 
+          />
+          <kbd class="search-kbd">/</kbd>
+          <div id="searchDropdown" class="search-dropdown hidden"></div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="predictionBtn" class="btn-oracle">
+          <span>🔮 PREDICTION MATRIX</span>
+        </button>
+        <button id="soundToggle" class="btn-icon" title="Toggle Tactile Audio">
+          <span id="soundIcon">🔊</span>
+        </button>
+        <button id="watchlistToggle" class="btn-watchlist">
+          <span>★ WATCHLIST</span>
+          <span id="watchlistCount" class="badge-count">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Genre & Mood Filter Bar -->
+    <section class="filter-strip">
+      <span class="filter-label">DISCOVERY MOODS:</span>
+      <div class="filter-chips" id="filterChips">
+        <button class="chip active" data-genre="All">All Masterworks</button>
+        <button class="chip" data-genre="Sci-Fi">⚡ Sci-Fi & Cyberpunk</button>
+        <button class="chip" data-genre="Action">💥 High-Octane Action</button>
+        <button class="chip" data-genre="Crime">🦇 Dark Noir & Crime</button>
+        <button class="chip" data-genre="Drama">🎭 Gripping Drama</button>
+        <button class="chip" data-genre="Adventure">🚀 Epic Adventure</button>
+      </div>
+    </section>
+
+    <!-- Hero Spotlight Section -->
+    <section class="hero-section" id="heroSection">
+      <div class="hero-backdrop-img" id="heroBackdrop"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-inner">
+        <div class="hero-poster-container">
+          <img id="heroPoster" src="" alt="Movie Poster" />
+          <div class="poster-badge" id="heroBadge">FEATURED SEED</div>
+        </div>
+        <div class="hero-data">
+          <div class="hero-meta-kicker" id="heroKicker">✦ SEED VECTOR SOURCE</div>
+          <h1 class="hero-title" id="heroTitle">Loading...</h1>
+          <div class="hero-meta-row" id="heroMetaRow">
+            <!-- Dynamic Badges -->
+          </div>
+          <p class="hero-synopsis" id="heroOverview">Loading synopsis...</p>
+          <div class="hero-credits-grid" id="heroCredits">
+            <!-- Director and Cast -->
+          </div>
+          <div class="hero-cta-row">
+            <button id="heroRecBtn" class="btn-primary">
+              <span>⚡ RE-COMPUTE VECTORS</span>
+            </button>
+            <button id="heroPredictBtn" class="btn-oracle">
+              <span>🔮 PREDICT PERFORMANCE</span>
+            </button>
+            <button id="heroTrailerBtn" class="btn-secondary">
+              <span>▶ PLAY TRAILER</span>
+            </button>
+            <button id="heroBookmarkBtn" class="btn-ghost">
+              <span id="heroBookmarkIcon">☆</span>
+              <span>SAVE TO VAULT</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <main class="recommendations-container">
+      <div class="section-title-bar">
+        <div>
+          <h2 class="section-heading">NEURAL RECOMMENDATION MATRIX</h2>
+          <p class="section-subheading" id="recSubheading">Computed via multi-dimensional cosine distance</p>
+        </div>
+        <div class="similarity-telemetry">
+          <span class="telemetry-dot"></span>
+          <span class="telemetry-text">ALGORITHM: COSINE TF-IDF (128-D)</span>
+        </div>
+      </div>
+
+      <div class="movies-grid" id="moviesGrid">
+        <!-- Rendered dynamically -->
+      </div>
+    </main>
+
+    <!-- Prediction Oracle Modal -->
+    <div id="predictionModal" class="modal-backdrop hidden">
+      <div class="modal-dialog" style="max-width: 840px;">
+        <button class="modal-close" id="predModalCloseBtn">✕</button>
+        <div style="padding: 2.25rem;">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem;">
+            <span style="font-size:1.5rem; color:var(--accent-amber);">🔮</span>
+            <h2 style="font-family:var(--font-display); font-size:1.6rem; font-weight:800; color:#FFF;">
+              AI PERFORMANCE & SUCCESS PREDICTOR
+            </h2>
+          </div>
+          <p style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted); margin-bottom:1.5rem;">
+            Simulation Engine analyzing director pedigree, star power, budget tiers, and thematic market draw.
+          </p>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+            <!-- Inputs -->
+            <div style="background:var(--bg-surface-elevated); padding:1.25rem; border-radius:12px; border:1px solid var(--border-hairline);">
+              <label style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-amber-light); display:block; margin-bottom:0.35rem;">GENRE SPACE</label>
+              <select id="predGenre" style="width:100%; padding:0.6rem; background:#07080B; color:#FFF; border:1px solid var(--border-hairline); border-radius:6px; margin-bottom:1rem; font-family:var(--font-body);">
+                <option value="Sci-Fi">Sci-Fi & Cyberpunk</option>
+                <option value="Action">Action Thriller</option>
+                <option value="Crime">Crime Noir</option>
+                <option value="Drama">Drama & Mystery</option>
+                <option value="Adventure">Space Adventure</option>
+              </select>
+
+              <label style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-amber-light); display:block; margin-bottom:0.35rem;">DIRECTOR STATURE</label>
+              <select id="predDirector" style="width:100%; padding:0.6rem; background:#07080B; color:#FFF; border:1px solid var(--border-hairline); border-radius:6px; margin-bottom:1rem; font-family:var(--font-body);">
+                <option value="auteur">Legendary Auteur (Nolan / Villeneuve)</option>
+                <option value="veteran">High-Profile Studio Veteran</option>
+                <option value="indie">Visionary Indie Talent</option>
+                <option value="debut">First-Time Director</option>
+              </select>
+
+              <label style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-amber-light); display:block; margin-bottom:0.35rem;">BUDGET TIER</label>
+              <select id="predBudget" style="width:100%; padding:0.6rem; background:#07080B; color:#FFF; border:1px solid var(--border-hairline); border-radius:6px; font-family:var(--font-body);">
+                <option value="mega">Mega-Blockbuster ($180M+)</option>
+                <option value="high" selected>High-Budget ($80M - $180M)</option>
+                <option value="mid">Mid-Budget ($20M - $80M)</option>
+                <option value="indie">Micro-Budget (< $20M)</option>
+              </select>
+            </div>
+
+            <!-- Telemetry Output -->
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div style="background:var(--bg-surface-elevated); padding:1rem; border-radius:12px; border:1px solid var(--border-focus);">
+                <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">PREDICTED TMDB RATING</div>
+                <div id="predRatingVal" style="font-family:var(--font-display); font-size:1.8rem; font-weight:800; color:var(--accent-amber-light);">★ 8.8 / 10</div>
+                <div style="font-family:var(--font-mono); font-size:0.7rem; color:#10B981;">Top 5% Universal Acclaim</div>
+              </div>
+
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
+                <div style="background:var(--bg-surface-elevated); padding:0.85rem; border-radius:10px; border:1px solid var(--border-hairline);">
+                  <div style="font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted);">CRITICS FRESH</div>
+                  <div id="predCriticsVal" style="font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:#10B981;">94%</div>
+                </div>
+                <div style="background:var(--bg-surface-elevated); padding:0.85rem; border-radius:10px; border:1px solid var(--border-hairline);">
+                  <div style="font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted);">BOX OFFICE ROI</div>
+                  <div id="predRoiVal" style="font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:#06B6D4;">3.4x ROI</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Drivers -->
+          <div style="background:var(--bg-surface-elevated); padding:1rem; border-radius:12px; border:1px solid var(--border-hairline);">
+            <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:0.25rem;">
+              <span>Directorial Prestige Factor</span>
+              <strong id="barDirVal">92%</strong>
+            </div>
+            <div style="width:100%; height:5px; background:rgba(255,255,255,0.08); border-radius:3px; margin-bottom:0.75rem;">
+              <div id="barDirFill" style="height:100%; width:92%; background:var(--accent-amber); border-radius:3px;"></div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:0.25rem;">
+              <span>Thematic Concept Draw</span>
+              <strong id="barConceptVal">88%</strong>
+            </div>
+            <div style="width:100%; height:5px; background:rgba(255,255,255,0.08); border-radius:3px;">
+              <div id="barConceptFill" style="height:100%; width:88%; background:#06B6D4; border-radius:3px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Movie Detail Modal -->
+    <div id="movieModal" class="modal-backdrop hidden">
+      <div class="modal-dialog">
+        <button class="modal-close" id="modalCloseBtn">✕</button>
+        <div class="modal-backdrop-banner" id="modalBackdrop"></div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <img id="modalPoster" class="modal-poster" src="" alt="" />
+            <div class="modal-info">
+              <div class="modal-match-tag" id="modalMatchTag">98% COMPATIBILITY</div>
+              <h2 id="modalTitle" class="modal-title">Movie Title</h2>
+              <div class="modal-meta-chips" id="modalChips"></div>
+            </div>
+          </div>
+          <div class="modal-body">
+            <p id="modalOverview" class="modal-synopsis"></p>
+            <div class="modal-spec-grid">
+              <div class="spec-card">
+                <span class="spec-label">DIRECTOR</span>
+                <span class="spec-val" id="modalDirector">-</span>
+              </div>
+              <div class="spec-card">
+                <span class="spec-label">STARRING</span>
+                <span class="spec-val" id="modalCast">-</span>
+              </div>
+              <div class="spec-card">
+                <span class="spec-label">THEMATIC KEYWORDS</span>
+                <span class="spec-val" id="modalKeywords">-</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="modalExploreBtn" class="btn-primary">
+              <span>EXPLORE SIMILAR TITLES</span>
+            </button>
+            <a id="modalTrailerLink" target="_blank" class="btn-secondary">
+              <span>▶ WATCH TRAILER</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Watchlist Drawer -->
+    <div id="watchlistDrawer" class="drawer-backdrop hidden">
+      <div class="drawer-panel">
+        <div class="drawer-header">
+          <h3>YOUR CINEMA VAULT</h3>
+          <button id="drawerCloseBtn" class="drawer-close">✕</button>
+        </div>
+        <div class="drawer-body" id="watchlistList">
+          <!-- Items -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
